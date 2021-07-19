@@ -32,6 +32,7 @@
     Edit
     <code>components/HelloWorld.vue</code> to test hot module replacement.
   </p>
+  <el-button type="primary">测试element-plus</el-button>
 </template>
 
 <script lang="ts">
@@ -68,4 +69,9 @@ code {
   border-radius: 4px;
   color: #304455;
 }
+</style>
+
+<style scoped lang="sass">
+a
+  color: $primary
 </style>

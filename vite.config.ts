@@ -9,4 +9,14 @@ export default defineConfig({
   server: {
     port: 11000,
   },
+
+  // 配置css预处理器
+  css: {
+    preprocessorOptions: {
+      sass: {
+        // \n 处理文件中多个引入报换行错误的问题
+        additionalData: "@import './src/styles/color.sass'\n",
+      },
+    },
+  },
 });

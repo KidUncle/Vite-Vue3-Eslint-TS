@@ -86,3 +86,93 @@ lint-staged配置后，我们不再需要配置husky时全局安装的eslint，�
 git add .
 git commit -m 'add lint-staged'
 ```  
+
+## **引入Element-plus**  
+
+### **安装**
+```
+npm install element-plus --save
+```
+
+### **配置**
+```
+// main.ts
+import { createApp } from 'vue';
+import ElementPlus from 'element-plus'; // ++
+import 'element-plus/lib/theme-chalk/index.css'; // ++
+import App from './App.vue';
+
+createApp(App).use(ElementPlus).mount('#app'); // edit
+```  
+此时可以 在项目尝试使用 element-plus 组件已验证 element-plus 安装是否成功
+
+### **修改Element主题**
+1.创建文件
+在src 目录下新增styles文件夹，并新增 color.sass 和 element-theme.sass 文件。其中color.sass 除了给element主题提供颜色配置，还会引入为全局变量，方便在组件中使用。
+还需装 sass
+```
+npm i sass --save-dev
+```  
+2.配置主题
+```
+// color.sass
+$--color-primary: red
+```  
+
+```
+// element-theme.sass
+@improt "./color.sass" // 引入主题色文件
+
+$--font-path: 'node_modules/element-plus/lib/theme-chalk/fonts'
+@import "node_modules/element-plus/packages/theme-chalk/src/index"
+```  
+
+```
+// main.ts
+import { createApp } from 'vue';
+import ElementPlus from 'element-plus';
+import 'element-plus/lib/theme-chalk/index.css'; // --
+import './styles/element-theme.sass'; // ++
+import App from './App.vue';
+
+createApp(App).use(ElementPlus).mount('#app');
+```
+3.配置全局变量
+前面单独创建了一个color.sass是为了将文件里的颜色变量引入到全局，方便在组件中使用。
+```
+$--color-primary: #ff0000
+$primary: #ff0000
+```   
+引入全局变量需要在vite.config.ts文件中配置css预处理器，并将引入的变量文件传给预处理器。配置方式如下
+```
+// vite.config.ts
+  css: {
+    preprocessorOptions: {
+      sass: {
+        // \n 处理文件中多个引入报换行错误的问题
+        additionalData: "@import './src/styles/color.sass'\n",
+      },
+    },
+  },
+```  
+引入后我们在组件内进行测试
+```
+// HelloWorld.vue
+<style scoped lang="sass">
+a
+  color: $primary
+</style>
+
+```
+4.修改默认语言
+使用组件时会发现Element-plus的默认语言变成了英文，需要自己引入并修改默认语言为中文。
+```
+import { createApp } from 'vue';
+import ElementPlus from 'element-plus'; 
+import 'element-plus/lib/theme-chalk/index.css'; 
+import './styles/element-theme.sass'; 
+import locale from 'element-plus/lib/locale/lang/zh-cn'; // ++ 
+import App from './App.vue';
+
+createApp(App).use(ElementPlus).mount('#app'); 
+```
