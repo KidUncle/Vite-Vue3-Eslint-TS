@@ -44,8 +44,39 @@ eslint -v
 
 通过配置husky，我们已经实现了在提交前对代码进行检查。但是eslint配置的是 eslint . --ext .js,.ts,.vue --fix，检查所有的js、ts、vue文件，随着项目代码越来越多，每次提交前校验所有代码显然是不现实的。所以需要一个办法每次只检查新增或修改的文件。
 
-## ** 添加lint-staged
+## **添加lint-staged**
 lint-staged的作用就是对暂存区的文件执行lint，可以让我们每次提交时只校验自己修改的文件。
 ```
 npm install lint-staged --save-dev
 ```
+### **配置lint-staged**
+安装完成后，在package.json文件中添加lint-staged的配置
+```
+// package.json
+...
+"scripts": {
+    ...
+    "lint-staged": "lint-staged"
+},
+"lint-staged": {
+    // 校验暂存区的ts、js、vue文件
+    "*.{ts,js,vue}": [
+      "eslint --fix",
+      "git add ."
+    ]
+}
+```
+添加scripts里的lint-staged命令，是因为不建议全局安装lint-staged，以防在其他同学电脑上没有全局安装导致运行报错。
+
+### **修改husky**
+添加lint-staged配置后，husky就不在需要直接调用eslint了。修改pre-commit文件如下：
+```
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# eslint . --ext .js,.ts,.vue --fix
+# git add .
+# exit 1
+npm run lint-staged
+```  
+lint-staged配置后，我们不再需要配置husky时全局安装的eslint，因为lint-staged可以检测项目里局部安装的脚本。同时，不建议全局安装脚本，原因同上。
