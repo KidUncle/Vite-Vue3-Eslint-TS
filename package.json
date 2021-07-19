@@ -4,7 +4,8 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint-staged": "lint-staged"
   },
   "dependencies": {
     "vue": "^3.0.5"
@@ -20,10 +21,17 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-vue": "^7.14.0",
+    "husky": "^7.0.0",
+    "lint-staged": "^11.0.1",
     "prettier": "2.3.2",
     "typescript": "^4.3.2",
     "vite": "^2.4.2",
-    "vue-tsc": "^0.0.24",
-    "husky": "^7.0.0"
+    "vue-tsc": "^0.0.24"
+  },
+  "lint-staged": {
+    "*.{ts,js,vue}": [
+      "eslint --fix",
+      "git add ."
+    ]
   }
 }
