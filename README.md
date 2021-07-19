@@ -80,3 +80,9 @@ npm install lint-staged --save-dev
 npm run lint-staged
 ```  
 lint-staged配置后，我们不再需要配置husky时全局安装的eslint，因为lint-staged可以检测项目里局部安装的脚本。同时，不建议全局安装脚本，原因同上。
+
+### **测试**
+```
+git add .
+git commit -m 'add lint-staged'
+```  
