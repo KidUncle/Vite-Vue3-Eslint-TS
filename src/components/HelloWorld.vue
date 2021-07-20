@@ -36,10 +36,14 @@
   <h1>{{ rootCount }}</h1>
   <h1>{{ count1 }}</h1>
   <h1>{{ moduleGetters }}</h1>
+  <el-button type="primary" @click="toHome">toHome</el-button>
+  <el-button type="primary" @click="toLogin">toLogin</el-button>
+  <router-view></router-view>
 </template>
 
 <script lang="ts">
 import { ref, defineComponent, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import { useStore } from '../store/index';
 
 export default defineComponent({
@@ -55,12 +59,27 @@ export default defineComponent({
     const count = ref(0);
     const store = useStore();
 
+    const router = useRouter();
+    // const route = useRoute();
+    function toHome() {
+      router.push({
+        name: 'home',
+      });
+    }
+    function toLogin() {
+      router.push({
+        name: 'login',
+      });
+    }
+
     return {
       count,
       rootState: computed(() => store.state.rootCount),
       count1: computed(() => store.state.module.count),
       moduleGetters: computed(() => store.getters.getCount),
       increment: () => store.commit('increment'),
+      toHome,
+      toLogin,
     };
   },
 });
