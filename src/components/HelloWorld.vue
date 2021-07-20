@@ -32,14 +32,19 @@
     Edit
     <code>components/HelloWorld.vue</code> to test hot module replacement.
   </p>
-  <el-button type="primary">测试element-plus</el-button>
+  <el-button type="primary" @click="increment">测试element-plus</el-button>
+  <h1>{{ rootCount }}</h1>
+  <h1>{{ count1 }}</h1>
+  <h1>{{ moduleGetters }}</h1>
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from 'vue';
+import { ref, defineComponent, computed } from 'vue';
+import { useStore } from '../store/index';
 
 export default defineComponent({
   name: 'HelloWorld',
+
   props: {
     msg: {
       type: String,
@@ -48,7 +53,15 @@ export default defineComponent({
   },
   setup: () => {
     const count = ref(0);
-    return { count };
+    const store = useStore();
+
+    return {
+      count,
+      rootState: computed(() => store.state.rootCount),
+      count1: computed(() => store.state.module.count),
+      moduleGetters: computed(() => store.getters.getCount),
+      increment: () => store.commit('increment'),
+    };
   },
 });
 </script>
