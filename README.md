@@ -345,3 +345,61 @@ interface State {
 }
 ```  
 将自定义的State接口当做泛型参数传给createStore即可。
+## 添加Vue-router
+
+**安装**
+```
+npm i vue-router@4 --save
+```
+**开始**
+在 src 目录下创建 route 目录，并创建 index.ts(也可以把 routes 抽离出来)。相较于vue-router@3 多了一个 createWebHashHistory。
+* 用 createWebHistory() 创建 HTML5 模式，推荐使用这个模式
+* hash 模式是用 createWebHashHistory() 创建的
+```
+import { createRouter, createWebHashHistory } from 'vue-router';
+
+const routes = [
+  {
+    path: '/home',
+    name: 'home',
+    component: () => import('../components/home.vue'),
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../components/login.vue'),
+  },
+];
+
+const router = createRouter({
+  history: createWebHashHistory(),
+  routes,
+});
+
+export default router;
+```
+然后在 main.ts 中挂载router实例
+**食用**
+引入的useRoute,useRouter 相当于vue2的 this.$route()，this.$router()
+```
+\\ 组件中
+setup: () => {
+    const router = useRouter();
+    // const route = useRoute();
+    function toHome() {
+      router.push({
+        name: 'home',
+      });
+    }
+    function toLogin() {
+      router.push({
+        name: 'login',
+      });
+    }
+    return {
+      toHome,
+      toLogin,
+    };
+  },
+```
+路由的跳转封装在方法里，通过触发事件进行食用。 
